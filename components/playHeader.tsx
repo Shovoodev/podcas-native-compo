@@ -45,11 +45,7 @@ const PlayHeader = () => {
             </CardHeader>
           </Card>
         </View>
-        <View className=" flex-row mb-8 gap-3 items-center">
-          <Text>0.00</Text>
-          <Progress value={50} />
-          <Text>- 0.00</Text>
-        </View>
+
         <View>
           <ControlBar />
         </View>
