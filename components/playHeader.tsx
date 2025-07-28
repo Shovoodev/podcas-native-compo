@@ -4,18 +4,20 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import Entypo from "@expo/vector-icons/Entypo";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
-import { Progress } from "./ui/progress";
 import ControlBar from "./controlBar";
+import { useRouter } from "expo-router";
+import * as SeparatorPrimitive from "@rn-primitives/separator";
 
 const PlayHeader = () => {
+  const router = useRouter();
   return (
-    <View className="flex justify-between h-screen">
+    <View className="flex justify-between h-screen mb-3">
       <View
         style={{ paddingTop: 50 }}
         className=" flex-row justify-between px-3"
       >
         <View className=" flex-row justify-between items-center">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.replace("/playList")}>
             <AntDesign name="down" size={20} color="white" />
           </TouchableOpacity>
         </View>
@@ -39,7 +41,6 @@ const PlayHeader = () => {
               </CardDescription>
               <CardTitle className=" text-center"> Future of AR</CardTitle>
               <CardDescription className=" text-center px-6">
-                {" "}
                 this is the description ot the album asdfasdf asdfa sdfas
               </CardDescription>
             </CardHeader>
@@ -49,8 +50,13 @@ const PlayHeader = () => {
         <View>
           <ControlBar />
         </View>
-        <View className=" items-center p-3 mb-6">
-          <Text className=" text-white font-semibold"> Create New Episode</Text>
+        <SeparatorPrimitive.Root className=" mb-3" />
+        <View className=" items-center p-4 mb-6 border mt-3 rounded-3xl border-white">
+          <TouchableOpacity>
+            <Text className=" text-white font-bold text-xl ">
+              Create New Episode
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

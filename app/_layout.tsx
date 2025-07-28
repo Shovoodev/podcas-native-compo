@@ -9,13 +9,13 @@ import {
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Appearance, Platform, View } from "react-native";
+import { Appearance, Image, Platform, Text, View } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "@rn-primitives/portal";
-import { ThemeToggle } from "~/components/ThemeToggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import PlayHeader from "~/components/playHeader";
+import TitlePageContent from "~/components/titlePageContent";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -52,7 +52,15 @@ export default function RootLayout() {
             header: () => <PlayHeader />,
           }}
         />
+        <Stack.Screen
+          name="playList"
+          options={{
+            title: "playlist",
+            header: () => <TitlePageContent />,
+          }}
+        />
       </Stack>
+
       <PortalHost />
     </ThemeProvider>
   );
@@ -65,7 +73,6 @@ const useIsomorphicLayoutEffect =
 
 function useSetWebBackgroundClassName() {
   useIsomorphicLayoutEffect(() => {
-    // Adds the background color to the html element to prevent white background on overscroll.
     document.documentElement.classList.add("bg-background");
   }, []);
 }

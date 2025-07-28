@@ -1,19 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import {
+  LayoutChangeEvent,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
+import * as CollapsiblePrimitive from "@rn-primitives/collapsible";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Entypo from "@expo/vector-icons/Entypo";
+import Feather from "@expo/vector-icons/Feather";
 import { Audio, AVPlaybackStatus, AVPlaybackStatusSuccess } from "expo-av";
 import { Progress } from "./ui/progress";
 
 const ControlBar = () => {
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState<any>(1);
   const [progress, setProgress] = useState(0);
-
+  const [position, setPosition] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
   const statusRef = useRef<AVPlaybackStatusSuccess | null>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [duration, setDuration] = useState<number>(0.0);
-
   const [isPlaying, setIsPlaying] = useState(false);
   useEffect(() => {
     return () => {
@@ -22,6 +30,16 @@ const ControlBar = () => {
       }
     };
   }, []);
+  const formatMillis = (millis: number) => {
+    const totalSeconds = Math.floor(millis / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  //
+
+  //
 
   const handlePress = async () => {
     if (!sound) {
@@ -37,8 +55,6 @@ const ControlBar = () => {
 
       if ("isPlaying" in status && status.isLoaded) {
         if (status.isPlaying && status.durationMillis) {
-          const time: any = (status.durationMillis / 1000).toFixed(2);
-          setDuration(time);
           await sound.pauseAsync();
           setIsPlaying(false);
         } else {
@@ -55,6 +71,10 @@ const ControlBar = () => {
       const percentage = (status.positionMillis / status.durationMillis) * 100;
       setProgress(percentage);
       statusRef.current = status;
+      const positionchange = status.positionMillis;
+      setPosition(positionchange);
+      const durationchange = status.durationMillis;
+      setTimeLeft(durationchange - positionchange);
     }
   };
 
@@ -67,33 +87,42 @@ const ControlBar = () => {
     <View>
       <View>
         <View className=" flex-row mb-8 gap-3 items-center">
-          <Text>0.00</Text>
+          <Text>{formatMillis(position)}</Text>
+
           <Progress value={progress} />
-          <Text>{duration}</Text>
+
+          <Text>-{formatMillis(timeLeft)}</Text>
         </View>
       </View>
       <View className="flex-row justify-between px-1 items-center">
         <View className="rounded-3xl ml-4 p-4">
           <TouchableOpacity onPress={changeSpeed}>
-            <Text className="text-xl underline text-white">{speed}x</Text>
+            <CollapsiblePrimitive.Root>
+              <CollapsiblePrimitive.Trigger>
+                <Text className="text-xl underline text-white ">{speed}x</Text>
+              </CollapsiblePrimitive.Trigger>
+              <CollapsiblePrimitive.Content>
+                <Text>@radix-ui/react</Text>
+              </CollapsiblePrimitive.Content>
+            </CollapsiblePrimitive.Root>
           </TouchableOpacity>
         </View>
-        <View className="rounded-3xl ml-4 p-4">
+        <View className=" ml-4 p-4 rounded-full bg-gray-600 ">
           <TouchableOpacity>
             <Text>
-              <AntDesign name="stepbackward" size={24} color="white" />
+              <Feather name="rotate-ccw" size={28} color="white" />
             </Text>
           </TouchableOpacity>
         </View>
-        <View className="bg-indigo-400 rounded-full ml-4 p-8">
+        <View className="bg-violet-300 rounded-full ml-4 p-8">
           <TouchableOpacity onPress={handlePress}>
-            <FontAwesome name="pause" size={24} color="white" />
+            <FontAwesome name="pause" size={30} color="white" />
           </TouchableOpacity>
         </View>
-        <View className="rounded-3xl ml-4 p-4">
+        <View className="ml-4 p-4 rounded-full bg-gray-600">
           <Text>
             <TouchableOpacity>
-              <AntDesign name="stepforward" size={24} color="white" />
+              <Entypo name="cw" size={28} color="white" />
             </TouchableOpacity>
           </Text>
         </View>
