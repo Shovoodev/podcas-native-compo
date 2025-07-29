@@ -1,48 +1,48 @@
 import React from "react";
-import { Image, Text, View, ScrollView } from "react-native";
+import { Image, Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { Card, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import TrackData from "~/assets/dummy/trackdata";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import Entypo from "@expo/vector-icons/Entypo";
+import { useRouter } from "expo-router";
+import { TrackType } from "~/common/types";
 
-type TrackType = {
-  title: string;
-  description: string;
-  image: string;
-  duration: number;
-};
-const albumData = [
-  {
-    title: "Echoes of Silence",
-    description:
-      "A moody collection of ambient soundscapes and haunting melodies.",
-    image: "https://picsum.photos/seed/album1/400/400",
-    duration: 45,
-  },
-  {
-    title: "Sunset Drive",
-    description: "Chill electronic beats perfect for cruising at golden hour.",
-    image: "https://picsum.photos/seed/album2/400/400",
-    duration: 34,
-  },
-  {
-    title: "Acoustic Dreams",
-    description: "Soft acoustic guitar and piano tunes for peaceful moments.",
-    image: "https://picsum.photos/seed/album3/400/400",
-    duration: 33.0,
-  },
-];
-
-const TrackCard = ({ title, description, image, duration }: TrackType) => {
+const TrackCard = ({
+  title,
+  description,
+  image,
+  episode,
+  duration,
+  scriptLink,
+}: TrackType) => {
+  const router = useRouter();
   return (
-    <Card className="flex-row items-center space-x-4 p-3 mb-3 rounded-xl shadow">
+    <Card className="flex-row items-center  space-x-4 gap-3 mb-2 rounded-xl shadow p-2">
       <Image
+        className=" mr-2"
         source={{ uri: image }}
-        style={{ height: 60, width: 60, borderRadius: 10 }}
+        style={{ height: 90, width: 90, borderRadius: 10 }}
       />
       <View className="flex-1">
-        <CardTitle>{title}</CardTitle>
+        <CardTitle className=" text-2xl">{title}</CardTitle>
         <CardDescription numberOfLines={1}>{description}</CardDescription>
-        <Text className="text-gray-500 text-sm mt-1 justify-end">
-          Duration: {duration}
-        </Text>
+        <View className=" flex-row">
+          <Text className="text-white text-sm mt-1 items-center ">
+            {episode}
+            <Entypo name="dot-single" size={20} color="white" />
+          </Text>
+
+          <Text className="text-white text-sm mt-1 ">Duration: {duration}</Text>
+        </View>
+      </View>
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            router.push(scriptLink);
+          }}
+        >
+          <AntDesign name="right" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     </Card>
   );
@@ -51,13 +51,15 @@ const TrackCard = ({ title, description, image, duration }: TrackType) => {
 const TrackList = () => {
   return (
     <ScrollView className="p-4">
-      {albumData.map((item, index) => (
+      {TrackData.map((item, index) => (
         <TrackCard
           key={index}
           title={item.title}
           description={item.description}
           image={item.image}
+          episode={item.episode}
           duration={item.duration}
+          scriptLink={item.scriptLink}
         />
       ))}
     </ScrollView>

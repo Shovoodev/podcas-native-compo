@@ -15,7 +15,8 @@ import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "@rn-primitives/portal";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import PlayHeader from "~/components/playHeader";
-import TitlePageContent from "~/components/titlePageContent";
+import TitlePageContent from "~/components/page/titlePageContent";
+import ScriptPage from "~/components/page/scriptPage";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -57,6 +58,13 @@ export default function RootLayout() {
           options={{
             title: "playlist",
             header: () => <TitlePageContent />,
+          }}
+        />
+        <Stack.Screen
+          name="script"
+          options={{
+            title: "script",
+            header: () => <ScriptPage />,
           }}
         />
       </Stack>
