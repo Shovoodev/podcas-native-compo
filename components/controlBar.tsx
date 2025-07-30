@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 import Popover from "react-native-popover-view";
@@ -11,18 +11,28 @@ import { Progress } from "./ui/progress";
 import { useOFMapApi } from "~/common/mediaContext";
 import formatMillis from "~/common/Foramtions";
 
+import { useRouter } from "expo-router";
+
 const ControlBar = () => {
+  const router = useRouter();
   const [speed, setSpeed] = useState<any>(1);
-  const [progress, setProgress] = useState(0);
-  const [position, setPosition] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(0);
   const statusRef = useRef<AVPlaybackStatusSuccess | null>(null);
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [showPopover, setShowPopover] = useState(false);
-  const buttonRef = useRef(null);
-  const { setProgressPass, progressPass, setDuration, duration } =
-    useOFMapApi();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const {
+    setProgressPass,
+    progressPass,
+    setDuration,
+    duration,
+    sound,
+    setSound,
+    setIsPlaying,
+    isPlaying,
+    setProgress,
+    progress,
+    setPosition,
+    setTimeLeft,
+    timeLeft,
+    position,
+  } = useOFMapApi();
 
   useEffect(() => {
     return () => {
@@ -32,9 +42,11 @@ const ControlBar = () => {
     };
   }, []);
 
-  //
-
-  //
+  const changeSpeed = async () => {
+    const newSpeed = speed < 5 ? speed + 1 : 1;
+    setSpeed(newSpeed);
+  };
+  useEffect(() => {}, []);
 
   const handlePress = async () => {
     if (!sound) {
@@ -75,11 +87,6 @@ const ControlBar = () => {
       const durationchange = status.durationMillis;
       setTimeLeft(durationchange - positionchange);
     }
-  };
-
-  const changeSpeed = async () => {
-    const newSpeed = speed < 5 ? speed + 1 : 1;
-    setSpeed(newSpeed);
   };
 
   return (
@@ -126,6 +133,7 @@ const ControlBar = () => {
           </Text>
         </View>
       </View>
+      <View className=" absolute bottom-0 mt-60"></View>
     </View>
   );
 };

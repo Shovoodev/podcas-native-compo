@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -10,11 +10,69 @@ import { Progress } from "../ui/progress";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
 import { useOFMapApi } from "~/common/mediaContext";
+import { AVPlaybackStatus, AVPlaybackStatusSuccess } from "expo-av";
 
 const TitlePageContent = () => {
   const router = useRouter();
-  const { progressPass, duration } = useOFMapApi();
+  const statusRef = useRef<AVPlaybackStatusSuccess | null>(null);
+
+  const {
+    progressPass,
+    duration,
+    sound,
+    setSound,
+    setIsPlaying,
+    isPlaying,
+    setDuration,
+    progress,
+    setProgress,
+    timeLeft,
+    setTimeLeft,
+    setProgressPass,
+    setPosition,
+  } = useOFMapApi();
   const value = (progressPass / duration) * 100;
+
+  // const handlePress = async () => {
+  //   if (!sound) {
+  //     const { sound: newSound } = await Audio.Sound.createAsync(
+  //       require("../../assets/music/Shake.mp3"),
+  //       { shouldPlay: true },
+  //       onPlaybackStatusUpdate
+  //     );
+  //     setSound(newSound);
+  //     setIsPlaying(true);
+  //   } else {
+  //     const status = await sound.getStatusAsync();
+
+  //     if ("isPlaying" in status && status.isLoaded) {
+  //       if (status.isPlaying && status.durationMillis) {
+  //         await sound.pauseAsync();
+  //         const val = status.positionMillis;
+  //         const length = status.durationMillis;
+  //         setIsPlaying(false);
+  //         setProgressPass(val);
+  //         setDuration(length);
+  //       } else {
+  //         await sound.playAsync();
+  //         setIsPlaying(true);
+  //       }
+  //     } else {
+  //       console.error("Playback error:", status);
+  //     }
+  //   }
+  // };
+  const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
+    if (status.isLoaded && status.durationMillis) {
+      const percentage = (status.positionMillis / status.durationMillis) * 100;
+      setProgress(percentage);
+      statusRef.current = status;
+      const positionchange = status.positionMillis;
+      setPosition(positionchange);
+      const durationchange = status.durationMillis;
+      setTimeLeft(durationchange - positionchange);
+    }
+  };
 
   return (
     <View style={{ paddingTop: 50 }} className="flex h-screen">
@@ -77,6 +135,7 @@ const TitlePageContent = () => {
               />
             </TouchableOpacity>
             <View className="bg-violet-300 rounded-full  p-6">
+              {/* <TouchableOpacity onPress={handlePress}> */}
               <TouchableOpacity>
                 <FontAwesome name="pause" size={12} color="black" />
               </TouchableOpacity>

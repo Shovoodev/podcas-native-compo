@@ -1,4 +1,4 @@
-import { AVPlaybackStatus } from "expo-av";
+import { Audio, AVPlaybackStatus } from "expo-av";
 import {
   type SetStateAction,
   type Dispatch,
@@ -23,6 +23,16 @@ interface OFMapContextValue {
   setProgressPass: SetState<number>;
   duration: number;
   setDuration: SetState<number>;
+  sound: Audio.Sound | null;
+  setSound: SetState<Audio.Sound | null>;
+  isPlaying: boolean;
+  setIsPlaying: SetState<boolean>;
+  progress: number;
+  setProgress: SetState<number>;
+  timeLeft: number;
+  setTimeLeft: SetState<number>;
+  position: number;
+  setPosition: SetState<number>;
 }
 
 // --------------------------------------------------------------------
@@ -33,6 +43,11 @@ export function OFMapProvider({ children }: PropsWithChildren) {
   const [inputSearch, setInputSearch] = useState<SelectedPlace | undefined>();
   const [progressPass, setProgressPass] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [progress, setProgress] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const [position, setPosition] = useState(0);
 
   const ctxValue = useMemo(
     () => ({
@@ -42,6 +57,16 @@ export function OFMapProvider({ children }: PropsWithChildren) {
       setProgressPass,
       duration,
       setDuration,
+      sound,
+      setSound,
+      isPlaying,
+      setIsPlaying,
+      progress,
+      setProgress,
+      timeLeft,
+      setTimeLeft,
+      position,
+      setPosition,
     }),
     [
       inputSearch,
@@ -50,6 +75,16 @@ export function OFMapProvider({ children }: PropsWithChildren) {
       setProgressPass,
       duration,
       setDuration,
+      sound,
+      setSound,
+      isPlaying,
+      setIsPlaying,
+      progress,
+      setProgress,
+      timeLeft,
+      setTimeLeft,
+      position,
+      setPosition,
     ]
   );
 
