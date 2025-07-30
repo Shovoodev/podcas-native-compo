@@ -48,12 +48,12 @@ const TitlePageContent = () => {
       <View>
         <TrackCard />
       </View>
-      <View className=" flex items-center justify-center border py-3 rounded-3xl mx-4 border-white p-1">
+      <View className=" flex items-center justify-center border py-2 rounded-3xl mx-4 border-white p-1">
         <Text className=" font-semibold text-white text-xl">
           Create Next Episode
         </Text>
       </View>
-      <View className=" flex-row items-center bottom-24 absolute border py-2 rounded-xl w-screen border-gray-700 bg-neutral-600">
+      <View className=" flex-row justify-center items-center  bottom-24 absolute border py-2 rounded-xl border-gray-700 bg-neutral-600">
         <View className=" flex-row items-center mr-1 w-[70%] p-1 px-4 gap-2">
           <Image
             className=" rounded-xl"

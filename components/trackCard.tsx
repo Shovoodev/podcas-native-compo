@@ -17,7 +17,7 @@ const TrackCard = ({
 }: TrackType) => {
   const router = useRouter();
   return (
-    <Card className="flex-row items-center  space-x-4 gap-3 mb-2 rounded-xl shadow p-2">
+    <Card className="flex-row items-center w-[345px] h-[95px]  space-x-4 gap-3 mb-4 rounded-xl shadow p-2">
       <Image
         className=" mr-2"
         source={{ uri: image }}

@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  LayoutChangeEvent,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Animated, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 import Popover from "react-native-popover-view";
@@ -27,7 +20,8 @@ const ControlBar = () => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [showPopover, setShowPopover] = useState(false);
   const buttonRef = useRef(null);
-  const { setProgressPass, progressPass, setDuration } = useOFMapApi();
+  const { setProgressPass, progressPass, setDuration, duration } =
+    useOFMapApi();
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
@@ -90,39 +84,19 @@ const ControlBar = () => {
 
   return (
     <View>
-      <View>
-        <View className=" flex-row mb-8 gap-3 items-center">
-          <Text>{formatMillis(position)}</Text>
+      <View className=" items-center">
+        <View className=" flex-row mb-4 gap-3 w-[345px] items-center">
+          <Text className=" text-white">{formatMillis(position)}</Text>
 
           <Progress value={progress} />
 
-          <Text>-{formatMillis(timeLeft)}</Text>
+          <Text className=" text-white">-{formatMillis(timeLeft)}</Text>
         </View>
       </View>
       <View className="flex-row justify-between px-1 items-center">
         <View className="rounded-3xl ml-4 p-4">
           <TouchableOpacity onPress={changeSpeed}>
-            <Popover
-              from={
-                <TouchableOpacity>
-                  <Text className="text-xl underline text-white ">
-                    {speed}x
-                  </Text>
-                </TouchableOpacity>
-              }
-            >
-              <View className=" h-34 w-80 bg-transparent gap-2 bottom-0">
-                <Text className=" text-center text-2xl text-black font-mono flex-row justify-center  p-2 rounded-full bg-violet-300">
-                  1x
-                </Text>
-                <Text className=" text-center text-2xl text-black font-mono flex-row justify-center border  p-2 rounded-full bg-violet-300">
-                  1x
-                </Text>
-                <Text className=" text-center text-2xl text-black font-mono flex-row justify-center border p-2 rounded-full bg-violet-300">
-                  1x
-                </Text>
-              </View>
-            </Popover>
+            <Text className="text-xl underline text-white ">{speed}x</Text>
           </TouchableOpacity>
         </View>
         <View className=" ml-4 p-4 rounded-full bg-gray-600 ">
