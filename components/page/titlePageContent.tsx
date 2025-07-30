@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -9,9 +9,13 @@ import { Text } from "../ui/text";
 import { Progress } from "../ui/progress";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Feather from "@expo/vector-icons/Feather";
+import { useOFMapApi } from "~/common/mediaContext";
 
 const TitlePageContent = () => {
   const router = useRouter();
+  const { progressPass, duration } = useOFMapApi();
+  const value = (progressPass / duration) * 100;
+
   return (
     <View style={{ paddingTop: 50 }} className="flex h-screen">
       <View className=" flex-row  justify-between">
@@ -25,7 +29,6 @@ const TitlePageContent = () => {
                 color="white"
               />
               <Text className=" text-2xl text-white  font-bold ">
-                {" "}
                 The Future of A1{" "}
               </Text>
             </View>
@@ -59,7 +62,7 @@ const TitlePageContent = () => {
           />
           <View className=" w-full">
             <Text className=" text-white text-xl font-bold">The art of ai</Text>
-            <Progress value={40} className=" bg-gray-800" />
+            <Progress value={value} />
           </View>
         </View>
 

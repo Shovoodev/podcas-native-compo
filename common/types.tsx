@@ -10,5 +10,8 @@ type SpeachType = {
   speaker: string;
   text: string;
 };
+type ProgressValueOutGoing = {
+  progressValue: number;
+};
 
-export { TrackType, SpeachType };
+export { TrackType, SpeachType, ProgressValueOutGoing };

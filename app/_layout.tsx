@@ -17,6 +17,7 @@ import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import PlayHeader from "~/components/playHeader";
 import TitlePageContent from "~/components/page/titlePageContent";
 import ScriptPage from "~/components/page/scriptPage";
+import { OFMapProvider } from "~/common/mediaContext";
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -44,30 +45,32 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: true }}>
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "Starter Base",
-            header: () => <PlayHeader />,
-          }}
-        />
-        <Stack.Screen
-          name="playList"
-          options={{
-            title: "playlist",
-            header: () => <TitlePageContent />,
-          }}
-        />
-        <Stack.Screen
-          name="script"
-          options={{
-            title: "script",
-            header: () => <ScriptPage />,
-          }}
-        />
-      </Stack>
+      <OFMapProvider>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <Stack screenOptions={{ headerShown: true }}>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "Starter Base",
+              header: () => <PlayHeader />,
+            }}
+          />
+          <Stack.Screen
+            name="playList"
+            options={{
+              title: "playlist",
+              header: () => <TitlePageContent />,
+            }}
+          />
+          <Stack.Screen
+            name="script"
+            options={{
+              title: "script",
+              header: () => <ScriptPage />,
+            }}
+          />
+        </Stack>
+      </OFMapProvider>
 
       <PortalHost />
     </ThemeProvider>

@@ -9,6 +9,8 @@ import { Progress } from "../ui/progress";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useOFMapApi } from "~/common/mediaContext";
+import formatMillis from "~/common/Foramtions";
 
 const ScriptTap = ({ speaker, text }: SpeachType) => {
   return (
@@ -20,29 +22,32 @@ const ScriptTap = ({ speaker, text }: SpeachType) => {
 };
 const ScriptPage = () => {
   const router = useRouter();
+  const { progressPass, duration } = useOFMapApi();
+  const value = (progressPass / duration) * 100;
+
   return (
     <SafeAreaView>
+      <View className=" flex-row items-center justify-between">
+        <View className=" flex-row justify-between items-center gap-2">
+          <TouchableOpacity onPress={() => router.back()}>
+            <View className=" flex-row gap-5 items-center">
+              <AntDesign
+                className=" ml-3 mb-4"
+                name="arrowleft"
+                size={20}
+                color="white"
+              />
+            </View>
+          </TouchableOpacity>
+          <Text className=" text-2xl text-white  font-bold p-2 mb-4">
+            Scripts
+          </Text>
+        </View>
+      </View>
       <ScrollView
         contentContainerStyle={{ paddingBottom: 30 }}
         className="flex h-screen"
       >
-        <View className=" flex-row items-center justify-between">
-          <View className=" flex-row justify-between items-center">
-            <TouchableOpacity onPress={() => router.back()}>
-              <View className=" flex-row gap-5 items-center">
-                <AntDesign
-                  className=" ml-3 mb-4"
-                  name="arrowleft"
-                  size={20}
-                  color="white"
-                />
-                <Text className=" text-2xl text-white  font-bold p-2 mb-4">
-                  Scripts
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
         <View>
           {ScriptText && ScriptText !== null ? (
             ScriptText.map((item, index) => {
@@ -68,7 +73,7 @@ const ScriptPage = () => {
           />
           <View className=" w-full">
             <Text className=" text-white text-xl font-bold">The art of ai</Text>
-            <Progress value={40} className=" bg-gray-800" />
+            <Progress value={value} className=" bg-gray-800" />
           </View>
         </View>
 

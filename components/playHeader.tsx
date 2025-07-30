@@ -48,7 +48,7 @@ const PlayHeader = () => {
         </View>
 
         <View>
-          <ControlBar />
+          <ControlBar progressValue={90} />
         </View>
         <SeparatorPrimitive.Root className=" mb-3" />
         <View className=" items-center p-4 mb-6 border mt-3 rounded-3xl border-white">

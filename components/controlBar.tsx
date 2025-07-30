@@ -7,13 +7,16 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import * as CollapsiblePrimitive from "@rn-primitives/collapsible";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+
+import Popover from "react-native-popover-view";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Entypo from "@expo/vector-icons/Entypo";
 import Feather from "@expo/vector-icons/Feather";
 import { Audio, AVPlaybackStatus, AVPlaybackStatusSuccess } from "expo-av";
 import { Progress } from "./ui/progress";
+import { useOFMapApi } from "~/common/mediaContext";
+import formatMillis from "~/common/Foramtions";
 
 const ControlBar = () => {
   const [speed, setSpeed] = useState<any>(1);
@@ -22,7 +25,11 @@ const ControlBar = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const statusRef = useRef<AVPlaybackStatusSuccess | null>(null);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
+  const [showPopover, setShowPopover] = useState(false);
+  const buttonRef = useRef(null);
+  const { setProgressPass, progressPass, setDuration } = useOFMapApi();
   const [isPlaying, setIsPlaying] = useState(false);
+
   useEffect(() => {
     return () => {
       if (sound) {
@@ -30,12 +37,6 @@ const ControlBar = () => {
       }
     };
   }, []);
-  const formatMillis = (millis: number) => {
-    const totalSeconds = Math.floor(millis / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
 
   //
 
@@ -44,7 +45,7 @@ const ControlBar = () => {
   const handlePress = async () => {
     if (!sound) {
       const { sound: newSound } = await Audio.Sound.createAsync(
-        require("../assets/music/shake.mp3"),
+        require("../assets/music/Shake.mp3"),
         { shouldPlay: true },
         onPlaybackStatusUpdate
       );
@@ -56,7 +57,11 @@ const ControlBar = () => {
       if ("isPlaying" in status && status.isLoaded) {
         if (status.isPlaying && status.durationMillis) {
           await sound.pauseAsync();
+          const val = status.positionMillis;
+          const length = status.durationMillis;
           setIsPlaying(false);
+          setProgressPass(val);
+          setDuration(length);
         } else {
           await sound.playAsync();
           setIsPlaying(true);
@@ -97,14 +102,27 @@ const ControlBar = () => {
       <View className="flex-row justify-between px-1 items-center">
         <View className="rounded-3xl ml-4 p-4">
           <TouchableOpacity onPress={changeSpeed}>
-            <CollapsiblePrimitive.Root>
-              <CollapsiblePrimitive.Trigger>
-                <Text className="text-xl underline text-white ">{speed}x</Text>
-              </CollapsiblePrimitive.Trigger>
-              <CollapsiblePrimitive.Content>
-                <Text>@radix-ui/react</Text>
-              </CollapsiblePrimitive.Content>
-            </CollapsiblePrimitive.Root>
+            <Popover
+              from={
+                <TouchableOpacity>
+                  <Text className="text-xl underline text-white ">
+                    {speed}x
+                  </Text>
+                </TouchableOpacity>
+              }
+            >
+              <View className=" h-34 w-80 bg-transparent gap-2 bottom-0">
+                <Text className=" text-center text-2xl text-black font-mono flex-row justify-center  p-2 rounded-full bg-violet-300">
+                  1x
+                </Text>
+                <Text className=" text-center text-2xl text-black font-mono flex-row justify-center border  p-2 rounded-full bg-violet-300">
+                  1x
+                </Text>
+                <Text className=" text-center text-2xl text-black font-mono flex-row justify-center border p-2 rounded-full bg-violet-300">
+                  1x
+                </Text>
+              </View>
+            </Popover>
           </TouchableOpacity>
         </View>
         <View className=" ml-4 p-4 rounded-full bg-gray-600 ">
@@ -137,7 +155,5 @@ const ControlBar = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({});
 
 export default ControlBar;
